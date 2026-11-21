@@ -470,3 +470,8 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
   .store strong { font-size: 1rem; }
   .store { flex: 1 1 calc(50% - 5px); min-width: 0; justify-content: center; padding: 7px 8px; }
 }
+
+/* ---------- Utility classes (replace inline styles so the Content Security Policy can block them) ---------- */
+.mt-0 { margin-top: 0 !important; }
+.mt-12 { margin-top: 12px !important; }
+.pt-0 { padding-top: 0 !important; }
