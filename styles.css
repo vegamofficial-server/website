@@ -475,3 +475,45 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
 .mt-0 { margin-top: 0 !important; }
 .mt-12 { margin-top: 12px !important; }
 .pt-0 { padding-top: 0 !important; }
+
+/* ---------- Hero with full photo behind the text ----------
+   The whole picture fills the hero; the text sits on the green wall (left). */
+.hero.hero-photo {
+  display: flex;
+  align-items: center;
+  aspect-ratio: 1376 / 768;          /* show the whole picture on wide screens */
+  min-height: 560px;
+  padding: 48px 0;
+  background:
+    linear-gradient(90deg, rgba(1, 40, 24, 0.55) 0%, rgba(1, 40, 24, 0.25) 38%, rgba(1, 40, 24, 0) 55%),
+    url("assets/services/hero-cleaning.webp") center / cover no-repeat,
+    var(--green-dark);
+}
+.hero-photo .hero-grid { display: block; width: 100%; }
+.hero-photo .hero-text { max-width: 540px; }
+.hero-photo h1 { color: var(--white); text-shadow: 0 2px 18px rgba(0, 0, 0, 0.25); }
+.hero-photo .hl { color: var(--cream); }
+.hero-photo .lead { color: rgba(255, 255, 255, 0.88); }
+.hero-photo .pill { background: rgba(255, 255, 255, 0.95); border-color: transparent; }
+.hero-photo .arrow-link { color: var(--cream); }
+.hero-photo .soft-link,
+.hero-photo .soft-link:hover { color: rgba(255, 255, 255, 0.85); }
+.hero-photo .trust-row { color: rgba(255, 255, 255, 0.88); }
+.hero-photo .trust-row li::before { color: var(--cream); }
+
+@media (max-width: 900px) {
+  /* phones/tablets: portrait photo, whole width, pinned to the bottom.
+     Text sits on the green wall above the Partner; extra bottom padding
+     keeps her and the table clear of the text. */
+  .hero.hero-photo {
+    aspect-ratio: auto;
+    min-height: 0;
+    align-items: flex-start;
+    padding: 36px 0 calc(100vw * 1152 / 928 * 0.62);
+    background:
+      /* fade the top (empty wall) of the photo into the solid green above it */
+      linear-gradient(180deg, #1f4a33 0%, #1f4a33 8%, rgba(31, 74, 51, 0) 42%) center bottom / 100% calc(100vw * 1152 / 928) no-repeat,
+      url("assets/services/hero-cleaning-phone.webp") center bottom / 100% auto no-repeat,
+      #1f4a33;
+  }
+}
