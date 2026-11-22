@@ -202,32 +202,6 @@ h1 .hl, h2 .hl { color: var(--green); }
 }
 .btn-lg { padding: 15px 34px; font-size: 1rem; }
 
-/* ---------- Scrolling ribbon with the logo mark between each point ---------- */
-.flow-wrap { overflow: hidden; }
-.logo-flow {
-  background: var(--cream);
-  color: var(--green-dark);
-  overflow: hidden;
-  padding: 16px 0;
-  border-top: 1px solid rgba(1, 94, 55, 0.18);
-  border-bottom: 1px solid rgba(1, 94, 55, 0.18);
-}
-.flow-track { display: flex; width: max-content; animation: flow 38s linear infinite; }
-.flow-dup { display: flex; }
-.logo-flow:hover .flow-track { animation-play-state: paused; }
-.flow-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 14px;
-  padding: 0 22px;
-  font-weight: 700;
-  font-size: 1.05rem;
-  white-space: nowrap;
-}
-.flow-item img { height: 24px; width: auto; }
-@keyframes flow { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .flow-track { animation: none; } }
-
 /* ---------- Sections ---------- */
 section.block { padding: 96px 0; }
 .section-title {
