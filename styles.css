@@ -96,8 +96,8 @@ h1 .hl, h2 .hl { color: var(--green); }
   white-space: nowrap;
 }
 .btn:hover { transform: translateY(-1px); }
-.btn-green { background: var(--green); color: var(--cream); }
-.btn-green:hover { background: var(--green-dark); color: var(--cream); }
+.btn-green { background: var(--green); color: var(--white); }
+.btn-green:hover { background: var(--green-dark); color: var(--white); }
 .btn-outline { border-color: var(--ink); color: var(--ink); background: transparent; }
 .btn-outline:hover { background: var(--ink); color: var(--paper); }
 .btn svg { width: 18px; height: 18px; fill: currentColor; }
@@ -490,4 +490,71 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
       url("assets/services/hero-cleaning-phone.webp") center bottom / 100% auto no-repeat,
       #1f4a33;
   }
+}
+
+/* ---------- Phones: calmer, roomier hero ---------- */
+@media (max-width: 560px) {
+  .site-header .wrap { min-height: 64px; }
+  .nav { top: 64px; }
+  .hero.hero-photo { padding-top: 28px; }
+
+  .pill {
+    align-items: flex-start;
+    border-radius: 14px;
+    padding: 6px 12px;
+    font-size: 0.78rem;
+    line-height: 1.4;
+    margin-bottom: 20px;
+  }
+  /* badge on two tidy lines: date, then the areas */
+  .pill-sep { display: none; }
+  .pill-place { display: block; font-weight: 500; opacity: 0.8; }
+  .pill .dot { width: 7px; height: 7px; margin-top: 0.36em; flex-shrink: 0; }
+
+  .hero h1 {
+    font-size: 2.15rem;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  .hero .lead { font-size: 1rem; line-height: 1.55; margin-bottom: 20px; }
+
+  .hero-links { gap: 6px 16px; margin-bottom: 22px; }
+  .arrow-link { font-size: 0.98rem; }
+  .soft-link { font-size: 0.9rem; }
+
+  /* the two store buttons side by side */
+  .store-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
+  .store { min-width: 0; padding: 8px 10px; gap: 8px; justify-content: center; }
+  .store svg { width: 22px; height: 22px; }
+  .store small { font-size: 0.6rem; }
+  .store strong { font-size: 0.95rem; }
+
+  .trust-row { font-size: 0.82rem; gap: 6px 14px; }
+}
+
+/* ---------- Store buttons: small white pills, soft shadow, official logo colours ---------- */
+.store-row { gap: 10px; }
+.store {
+  background: var(--white);
+  color: #1f1f1f;
+  border: 0;
+  border-radius: 12px;
+  padding: 6px 14px 6px 11px;
+  gap: 8px;
+  min-width: 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.22);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.store:hover { color: #1f1f1f; transform: translateY(-1px); box-shadow: 0 10px 22px rgba(0, 0, 0, 0.26); }
+.store svg { width: 20px; height: 20px; fill: #000; }
+.store small { font-size: 0.58rem; color: #5f6368; opacity: 1; font-weight: 500; }
+.store strong { font-size: 0.92rem; font-weight: 600; letter-spacing: -0.01em; }
+@media (max-width: 560px) {
+  /* keep them compact instead of stretching across the screen */
+  .store-row { display: flex; gap: 8px; }
+  .store { flex: 0 0 auto; padding: 6px 12px 6px 10px; border-radius: 11px; }
+  .store svg { width: 18px; height: 18px; }
+  .store small { font-size: 0.55rem; }
+  .store strong { font-size: 0.86rem; }
 }
