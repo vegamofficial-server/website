@@ -103,6 +103,7 @@ h1 .hl, h2 .hl { color: var(--green); }
 .btn svg { width: 18px; height: 18px; fill: currentColor; }
 
 .nav-toggle { display: none; }
+.nav-backdrop { display: none; }   /* only used by the mobile menu (see max-width: 860px) */
 
 /* ---------- Hero (simple, Pronto-style) ---------- */
 .hero {
@@ -411,16 +412,66 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
     border: 1px solid var(--line); background: var(--white); cursor: pointer;
     order: 3;
   }
-  .nav-toggle svg { width: 22px; height: 22px; stroke: var(--ink); }
+  .nav-toggle svg { width: 22px; height: 22px; stroke: var(--ink); overflow: visible; }
+  /* hamburger lines turn into an X while the menu is open */
+  .nav-toggle path { transition: transform 0.2s ease, opacity 0.2s ease; transform-box: fill-box; transform-origin: center; }
+  .nav-toggle[aria-expanded="true"] .l1 { transform: translateY(5px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .l2 { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] .l3 { transform: translateY(-5px) rotate(-45deg); }
+  .nav-toggle:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
+
+  /* Mobile menu: a full-width sheet that drops down from under the header.
+     It is anchored to the header (top: 100%), not to a fixed pixel offset,
+     and justify-self is reset so the desktop "center" rule can't shrink it. */
   .nav {
-    display: none;
-    position: absolute; top: 72px; left: 0; right: 0;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    justify-self: stretch;
+    display: flex;
     flex-direction: column; align-items: stretch; gap: 0;
-    background: var(--paper); border-bottom: 1px solid var(--line);
-    padding: 8px 24px 18px;
+    max-height: calc(100vh - var(--header-h, 64px));
+    max-height: calc(100dvh - var(--header-h, 64px));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--paper);
+    border-top: 1px solid var(--line);
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 18px 40px rgba(29, 42, 34, 0.18);
+    padding: 6px max(24px, env(safe-area-inset-right)) calc(18px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left));
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
   }
-  .nav.open { display: flex; }
-  .nav a { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: 1rem; color: var(--ink); }
+  .nav.open {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s;
+  }
+  .nav a {
+    display: flex; align-items: center;
+    min-height: 52px;
+    padding: 0 4px;
+    border-bottom: 1px solid var(--line);
+    font-size: 1.05rem; font-weight: 600; color: var(--ink);
+  }
+  .nav a:last-child { border-bottom: 0; }
+  .nav a:focus-visible { outline: 2px solid var(--green); outline-offset: -2px; border-radius: 8px; }
+
+  /* dim the page behind the open menu; tapping it closes the menu */
+  .nav-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    z-index: 19;                      /* just under the sticky header (20) */
+    background: rgba(1, 30, 18, 0.45);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+  }
+  .menu-open .nav-backdrop { opacity: 1; visibility: visible; transition: opacity 0.2s ease, visibility 0s; }
+  html.menu-open, html.menu-open body { overflow: hidden; }
+  .menu-open .site-header { background: var(--white); }
 
   .hero { padding: 20px 0 36px; }
   .hero-grid { grid-template-columns: 1fr; gap: 8px; }
@@ -440,9 +491,6 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
   .footer-top { grid-template-columns: 1fr; }
   .brand .word { height: 22px; }
   .header-cta { padding: 8px 14px !important; font-size: 0.82rem !important; }
-  .store { flex: 1 1 calc(50% - 6px); min-width: 0; justify-content: center; padding: 8px 10px; }
-  .store strong { font-size: 1rem; }
-  .store { flex: 1 1 calc(50% - 5px); min-width: 0; justify-content: center; padding: 7px 8px; }
 }
 
 /* ---------- Utility classes (replace inline styles so the Content Security Policy can block them) ---------- */
@@ -456,6 +504,7 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
   display: flex;
   align-items: center;
   aspect-ratio: 1376 / 768;          /* show the whole picture on wide screens */
+  width: 100%;                       /* definite width: stops min-height from widening the box via aspect-ratio */
   min-height: 560px;
   padding: 48px 0;
   background:
@@ -495,7 +544,6 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
 /* ---------- Phones: calmer, roomier hero ---------- */
 @media (max-width: 560px) {
   .site-header .wrap { min-height: 64px; }
-  .nav { top: 64px; }
   .hero.hero-photo { padding-top: 28px; }
 
   .pill {
@@ -523,12 +571,7 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
   .arrow-link { font-size: 0.98rem; }
   .soft-link { font-size: 0.9rem; }
 
-  /* the two store buttons side by side */
-  .store-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-  .store { min-width: 0; padding: 8px 10px; gap: 8px; justify-content: center; }
-  .store svg { width: 22px; height: 22px; }
-  .store small { font-size: 0.6rem; }
-  .store strong { font-size: 0.95rem; }
+  .store-row { margin-bottom: 18px; }
 
   .trust-row { font-size: 0.82rem; gap: 6px 14px; }
 }
@@ -557,4 +600,40 @@ mark.todo { background: #fff1a8; color: inherit; padding: 0 3px; border-radius: 
   .store svg { width: 18px; height: 18px; }
   .store small { font-size: 0.55rem; }
   .store strong { font-size: 0.86rem; }
+}
+
+/* ---------- Responsive polish (from the full-site audit) ---------- */
+/* in-page links (#why, #services, #how) stop below the sticky header */
+html { scroll-padding-top: calc(var(--header-h, 72px) + 12px); }
+
+/* keep the highlighted phrase of the hero headline on one line */
+.hero h1 .hl { white-space: nowrap; }
+
+/* logo: comfortable tap area without changing how it looks */
+.brand { min-height: 44px; }
+
+@media (max-width: 560px) {
+  /* privacy tables: readable column widths, swipe sideways inside the box */
+  .table-wrap { -webkit-overflow-scrolling: touch; }
+  .table-wrap table { min-width: 560px; font-size: 0.9rem; }
+  th, td { padding: 10px 12px; }
+}
+
+@media (max-width: 860px) {
+  /* touch screens: footer links easier to tap */
+  .site-footer li { margin-bottom: 2px; }
+  .site-footer li a { display: inline-block; padding: 6px 0; }
+}
+
+@media (max-width: 380px) {
+  /* very small phones: service titles fit on two lines */
+  .service h3 { font-size: 1.02rem; }
+  .services { gap: 10px; }
+  .service .body { padding: 2px 12px 14px; }
+}
+
+/* ---------- Respect "reduce motion" ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .nav, .nav.open, .nav-backdrop, .nav-toggle path, .btn, .store, .service { transition: none !important; }
 }
